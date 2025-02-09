@@ -1,0 +1,174 @@
+npm install --save-dev electron-builder
+npm audit fix --force
+npm run watch
+npm run pack 
+npm update electron-builder
+npm run fund
+rmdir /S /Q %LocalAppData%\electron-builder\Cache
+Remove-Item -Recurse -Force "$env:LocalAppData\electron-builder\Cache"
+npm run pack
+npm run dist
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+---------the build bild using the above builder i.e --save-dev do not change the icona nd name in task manager so for that there is below builder which isay to use
+
+
+1     npm install  electron-packager
+
+2     npm run build not npm run dist or npm run package // use npm run dist wiil open installer that we dont want so do npm run build
+
+
+but this require the image of icon in .ico format only 
+
+and if the icons are not displaying then 
+
+go to 
+1 c drive 
+
+2 users 
+
+3 go to the current user like at381 
+
+4 go to app data
+
+5 go to local
+
+6 there is a file in las by the name  iconCache     delete that file and restart your computer then the icon in teh task ma ager will be as you changed
+
+
+
+
+
+package.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+    "name": "cpu-cache-m-driver",
+    "version": "1.0.0",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "watch": "concurrently \"npm run watch:main\" \"npm run watch:electron\"",
+        "watch:main": "nodemon --exec electron main.js --ignore node_modules/",
+        "watch:electron": "electron .",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder",
+        "postinstall": "electron-builder install-app-deps",
+        "package": "electron-packager . --platform=win32 --arch=x64 --icon=cpu.ico --name=\"CPU Cache-m Driver\"",
+        "build": "npm run package"
+    },
+    "dependencies": {
+        "@jitsi/robotjs": "^0.6.13",
+        "axios": "^1.0.0",
+        "child_process": "^1.0.2",
+        "express": "^4.18.4",
+        "mongoose": "^7.0.0",
+        "path": "^0.12.7",
+        "screenshot-desktop": "^1.15.1",
+        "uiohook-napi": "^1.5.4"
+    },
+    "devDependencies": {
+        "concurrently": "^8.0.0",
+        "electron": "^23.3.13",
+        "electron-builder": "^25.1.8",
+        "electron-packager": "^17.1.2",
+        "nodemon": "^3.0.0"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "cpu-cache-m driver",
+    "build": {
+        "appId": "cpu-cache-m driver",
+        "productName": "cpu-cache-m driver",
+        "win": {
+            "icon": "cpu.ico"
+        },
+        "mac": {
+            "icon": "cpu.ico"
+        },
+        "linux": {
+            "icon": "cpu.ico"
+        }
+    }
+}
+
+
+
+
+
+
+// below have problem 
+
+
+
+
+{
+  "name": "cpu-cache-m-driver",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "watch": "concurrently \"npm run watch:main\" \"npm run watch:electron\"",
+    "watch:main": "nodemon --exec electron main.js --ignore node_modules/",
+    "watch:electron": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps",
+    "package": "electron-packager . --platform=win32 --arch=x64 --icon=cpu.ico --appUserModelId='CPU Cache-m Driver'"
+  },
+  "dependencies": {
+    "axios": "^1.0.0",
+    "electron-packager": "^17.1.2",
+    "electron-updater": "^6.3.9",
+    "express": "^4.18.4",
+    "mongoose": "^7.0.0",
+    "os": "^0.1.2",
+    "path": "^0.12.7",
+    "uiohook-napi": "^1.5.4"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0",
+    "electron": "^33.3.1",
+    "electron-builder": "^24.13.3",
+    "nodemon": "^3.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "CPU Cache-m Driver",
+  "build": {
+    "appId": "CPU Cache-m Driver",
+    "productName": "CPU Cache-m Driver",
+    "win": {
+      "icon": "cpu.ico"
+    },
+    "mac": {
+      "icon": "cpu.ico"
+    },
+    "linux": {
+      "icon": "cpu.ico"
+    }
+  }
+}

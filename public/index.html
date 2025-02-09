@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cpu-cache-m-driver</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="response-container" style="height: 100vh; overflow-y: auto;">FS Mode</div>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        let isTextTransparent = false; // To keep track of the text visibility
+
+        // Listen for responses from the main process
+        ipcRenderer.on('display-question', (event, question) => {
+            const responseContainer = document.getElementById('response-container');
+            
+            responseContainer.innerText = question; // Display the question
+
+        });
+
+        
+
+        // Listen for the make-text-transparent event to toggle the text visibility
+        ipcRenderer.on('make-text-transparent', () => {
+            isTextTransparent = !isTextTransparent; // Toggle the transparency flag
+            document.body.style.opacity = isTextTransparent ? '0.0' : '0.4'; // Toggle opacity
+        });
+
+        // Scroll the content up and down based on the keyboard shortcuts
+        ipcRenderer.on('scroll-down', () => {
+            const container = document.getElementById('response-container');
+            container.scrollBy({ top: 100, behavior: 'smooth' });
+        });
+
+        ipcRenderer.on('scroll-up', () => {
+            const container = document.getElementById('response-container');
+            container.scrollBy({ top: -100, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>

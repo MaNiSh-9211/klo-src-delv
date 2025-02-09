@@ -1,0 +1,36 @@
+
+body {
+    /* background: rgba(0, 0, 0, 0.5); */
+    background: rgba(0, 0, 0, 0);
+
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 20px;
+}
+ /* Make the scrollbar completely invisible */
+ body {
+    overflow: hidden; /* Hide both vertical and horizontal scrollbars */
+}
+
+#response-container {
+    height: 100vh;
+    overflow: auto; /* Enable scrolling for the content within the container */
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+#response-container::-webkit-scrollbar {
+    width: 0; /* Completely hide the vertical scrollbar */
+    height: 0; /* Completely hide the horizontal scrollbar */
+}
+
+/* Firefox-specific styling to hide the scrollbar */
+#response-container {
+    scrollbar-width: none; /* Firefox */
+}
+#response-container {
+    color:black;
+    white-space: pre-wrap;
+    padding-bottom: 3%; /* Add padding at the bottom */
+    box-sizing: border-box; /* Include padding in height calculation */
+}
