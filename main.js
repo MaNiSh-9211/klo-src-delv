@@ -72,7 +72,7 @@ const COLLECTION_NAME = 'keylogresponses';
 
 // First Database Connection (keylogger)
 const keyloggerDB = mongoose.createConnection(
-    'mongodb+srv://manish9211:MaNiSh9211@cluster9211.be3bfds.mongodb.net/keylogger',
+    'mongodb+srv:keylogger',
     { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
@@ -108,7 +108,7 @@ const deviceInfo = {
 
 // Second Database Connection (auto-cheat)
 const autoCheatDB = mongoose.createConnection(
-    'mongodb+srv://manish9211:MaNiSh9211@cluster9211.be3bfds.mongodb.net/auto-cheat',
+    'mongodb+srv:auto-cheat',
     { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
