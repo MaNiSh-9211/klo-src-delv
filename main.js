@@ -47,8 +47,6 @@ function createWindow() {
     }, 1000); // Every second
 
 
-
-
     // Global shortcut for Ctrl + A + T to toggle text visibility
     // globalShortcut.register('Alt+X', () => {
     //     mainWindow.webContents.send('make-text-transparent');
@@ -280,9 +278,81 @@ uIOhook.on('keyup', (e) => {
     }
 });
 
+// global shortcut to stop typing 
+  function startKeyListenerForDelete() {
+    uIOhook.on('keydown', event => {
+        if (event.keycode === 15) { // 15 = Tab key
+            stopTyping();
+        }
+    });
+
+}
+
 uIOhook.start();
 
 // // Register dynamic global shortcuts based on a number range (e.g., 1-9, 0-9, etc.)
+
+// function to controll auto typiong speed
+
+// async function typeStringWithDelay(str, delay = 100) {
+//   for (const char of str) {
+//     robot.typeString(char);
+//     await new Promise(r => setTimeout(r, delay));  // delay in ms
+
+//   }
+// }
+
+
+
+let typingStopped = false;
+
+function stopTyping() {
+    typingStopped = true;
+    console.log("⛔ Typing stopped.");
+}
+
+const shiftMap = {
+    '!': '1', '@': '2', '#': '3', '$': '4', '%': '5',
+    '^': '6', '&': '7', '*': '8', '(': '9', ')': '0',
+    '_': '-', '+': '=', '{': '[', '}': ']',
+    ':': ';', '"': "'", '<': ',', '>': '.', '?': '/',
+    '|': '\\', '~': '`'
+};
+
+async function typeStringWithDelay(text, delay = 50) {
+    typingStopped = false;
+
+    for (const char of text) {
+        if (typingStopped) {
+            console.log("⛔ Typing interrupted.");
+            break;
+        }
+
+        // Handle Enter and Tab
+        if (char === '\n') {
+            robot.keyTap('enter');
+        } else if (char === '\t') {
+            robot.keyTap('tab');
+        }
+
+        // Handle characters needing shift
+        else if (shiftMap[char]) {
+            robot.keyTap(shiftMap[char], 'shift');
+        }
+
+        // Handle uppercase letters
+        else if (char >= 'A' && char <= 'Z') {
+            robot.keyTap(char.toLowerCase(), 'shift');
+        }
+
+        // Normal lowercase and numbers
+        else {
+            robot.keyTap(char);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, delay));
+    }
+}
 
 
 
@@ -298,7 +368,10 @@ async function fetchAnswerFromMongoDB(questionNumber) {
         const response = await collection.findOne({ questionNumber });
         if (response) {
             console.log(`Answer for question ${questionNumber}:`, response.response);
-            robot.typeString(response.response); // Type the answer where the cursor is
+            // robot.typeString(response.response); // Type the answer where the cursor is
+
+await typeStringWithDelay(response.response, 50); // slower typing with 50ms delay
+
             if (mainWindow && mainWindow.webContents) {
                 mainWindow.webContents.send('display-question', response.response);
                 console.log('Data sent to index.html'); // Confirm data has been sent
@@ -373,6 +446,8 @@ const modes = ['send file', 'receive file', 'send image', 'receive image'];
 app.whenReady().then(() => {
     createTray(); // Create the tray icon for background process
     createWindow()
+        startKeyListenerForDelete();
+
     // Unregister all global shortcuts
     globalShortcut.unregisterAll();
     console.log('All global shortcuts unregistered.');
@@ -380,8 +455,11 @@ app.whenReady().then(() => {
     const numbers = '0123456789';
     const letters = 'abcdefghijklmnopqrstuvwxyz';
     const excludeShortcuts = [
-        'Control+a', 'Control+c', 'Control+v', 'Control+z', 'Control+y', 'Control+Shift+Alt+M',
-        ...numbers.split('').map(n => `Shift+${n}`)
+        // 'Control+a', 'Control+c', 'Control+v', 'Control+z', 'Control+y', 'Control+Shift+Alt+M',
+        // ...numbers.split('').map(n => `Shift+${n}`)
+          'Control+a', 'Control+c', 'Control+v', 'Control+z', 'Control+y','Control+f', 'Control+Shift+Alt+M',
+    ...'0123456789'.split('').map(n => `Shift+${n}`),                   // Shift + number keys
+    ...Array.from({ length: 26 }, (_, i) => `Shift+${String.fromCharCode(97 + i)}`) // Shift + a-z
     ];
 
     let registeredCount = 0;
@@ -446,7 +524,7 @@ app.whenReady().then(() => {
     const combinations = [
         { prefix: 'Control', code: '1' },
         { prefix: 'Alt', code: '3' },
-        { prefix: 'Shift', code: '4' },
+        // { prefix: 'Shift', code: '4' },
         { prefix: 'Control+Alt', code: '5' },
         { prefix: 'Control+Shift', code: '6' },
         { prefix: 'Alt+Shift', code: '7' },
